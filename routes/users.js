@@ -3,6 +3,7 @@ const {
   getSingleUser,
   addSingleUser,
   deleteSingleUser,
+  updateSingleUser,
 } = require('../controller/users');
 
 const User = {
@@ -64,6 +65,22 @@ const deleteSingleUserOptions = {
   handler: deleteSingleUser,
 };
 
+const updateSingleUserOptions = {
+  schema: {
+    body: {
+      type: 'object',
+      required: ['name'],
+      properties: {
+        name: { type: 'string' },
+      },
+    },
+    response: {
+      201: User,
+    },
+  },
+  handler: updateSingleUser,
+};
+
 async function userRoutes(fastify, options) {
   // Get All Users
   fastify.get('/users', getAllUsersOptions);
@@ -76,6 +93,9 @@ async function userRoutes(fastify, options) {
 
   // Delete Single User
   fastify.delete('/users/:id', deleteSingleUserOptions);
+
+  // Update Single User
+  fastify.put('/users/:id', updateSingleUserOptions);
 }
 
 module.exports = userRoutes;

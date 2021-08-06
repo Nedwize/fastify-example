@@ -27,9 +27,18 @@ const deleteSingleUser = (req, reply) => {
   reply.send({ message: 'User deleted' });
 };
 
+const updateSingleUser = (req, reply) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  users = users.map((item) => (item.id === Number(id) ? { id, name } : item));
+  reply.send({ id, name });
+};
+
 module.exports = {
   getAllUsers,
   getSingleUser,
   addSingleUser,
   deleteSingleUser,
+  updateSingleUser,
 };
