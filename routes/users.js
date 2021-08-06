@@ -1,4 +1,9 @@
-const users = require('../data');
+const {
+  getAllUsers,
+  getSingleUser,
+  addSingleUser,
+  deleteSingleUser,
+} = require('../controller/users');
 
 const User = {
   type: 'object',
@@ -8,7 +13,7 @@ const User = {
   },
 };
 
-const usersOptions = {
+const getAllUsersOptions = {
   schema: {
     response: {
       200: {
@@ -17,26 +22,60 @@ const usersOptions = {
       },
     },
   },
+  handler: getAllUsers,
 };
 
-const userOptions = {
+const getSingleUserOptions = {
   schema: {
     response: {
       200: User,
     },
   },
+  handler: getSingleUser,
+};
+
+const addSingleUserOptions = {
+  schema: {
+    body: {
+      type: 'object',
+      required: ['name'],
+      properties: {
+        name: { type: 'string' },
+      },
+    },
+    response: {
+      201: User,
+    },
+  },
+  handler: addSingleUser,
+};
+
+const deleteSingleUserOptions = {
+  schema: {
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          message: { type: 'string' },
+        },
+      },
+    },
+  },
+  handler: deleteSingleUser,
 };
 
 async function userRoutes(fastify, options) {
-  fastify.get('/users', usersOptions, (req, reply) => {
-    reply.send(users);
-  });
+  // Get All Users
+  fastify.get('/users', getAllUsersOptions);
 
-  fastify.get('/users/:id', userOptions, (req, reply) => {
-    const { id } = req.params;
-    const user = users.find((user) => user.id === Number(id));
-    reply.send(user);
-  });
+  // Get Single User
+  fastify.get('/users/:id', getSingleUserOptions);
+
+  // Add Single User
+  fastify.post('/users/', addSingleUserOptions);
+
+  // Delete Single User
+  fastify.delete('/users/:id', deleteSingleUserOptions);
 }
 
 module.exports = userRoutes;
