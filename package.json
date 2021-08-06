@@ -13,6 +13,7 @@
   "author": "Nakshatra",
   "license": "ISC",
   "dependencies": {
-    "fastify": "^3.20.1"
+    "fastify": "^3.20.1",
+    "uuid": "^8.3.2"
   }
 }

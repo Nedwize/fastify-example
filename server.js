@@ -1,9 +1,7 @@
 const fastify = require('fastify')({ logger: true });
 const PORT = 5000;
 
-fastify.get('/', (req, reply) => {
-  reply.send({ data: 'Hello World' });
-});
+fastify.register(require('./routes/users'));
 
 const startServer = async () => {
   try {
