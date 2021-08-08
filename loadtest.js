@@ -1,20 +1,15 @@
 const loadtest = require('loadtest');
-const optionsForFastify = {
-  url: 'http://localhost:5000/users/4',
-  maxSeconds: 20,
-  concurrency: 10,
-  agentKeepAlive: true,
-};
-const optionsForExpress = {
-  url: 'http://localhost:8000/users/4',
-  maxSeconds: 20,
-  concurrency: 30,
+
+const options = {
+  maxSeconds: 30, // The test will be carried out for this duration of seconds
+  concurrency: 100, // Number of connections
   agentKeepAlive: true,
 };
 
-function testExpress() {
+function testExpress(options) {
+  options.url = 'http://localhost:8000/users';
   return new Promise((resolve) => {
-    loadtest.loadTest(optionsForExpress, function (error, result) {
+    loadtest.loadTest(options, function (error, result) {
       if (error) {
         return console.error('Got an error: %s', error);
       }
@@ -23,9 +18,10 @@ function testExpress() {
   });
 }
 
-function testFastify() {
+function testFastify(options) {
+  options.url = 'http://localhost:5000/users';
   return new Promise((resolve) => {
-    loadtest.loadTest(optionsForFastify, function (error, result) {
+    loadtest.loadTest(options, function (error, result) {
       if (error) {
         return console.error('Got an error: %s', error);
       }
@@ -35,12 +31,11 @@ function testFastify() {
 }
 
 const runTest = async () => {
-  let resultsExpress = await testExpress();
-  let resultsFastify = await testFastify();
-  //   console.log({ Express: resultsExpress });
-  //   console.log({ Fastify: resultsFastify });
+  let resultsExpress = await testExpress(options);
+  let resultsFastify = await testFastify(options);
   resultsFastify.name = 'Fastify';
   resultsExpress.name = 'Express';
+
   console.table(
     [resultsExpress, resultsFastify],
     ['name', 'rps', 'totalRequests', 'meanLatencyMs', 'totalErrors']
