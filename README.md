@@ -18,6 +18,8 @@ Endpoints -
 
 # Getting Started
 
+Run `npm install` in root as well as both the sub directories
+
 Run this command inside both the directories `fastify-server` and `express-server`;
 
 ```bash
