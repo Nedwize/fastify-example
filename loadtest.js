@@ -35,6 +35,7 @@ const runTest = async () => {
   let resultsFastify = await testFastify(options);
   resultsFastify.name = 'Fastify';
   resultsExpress.name = 'Express';
+  console.log(`Testing with ${options.concurrency} connections`);
 
   console.table(
     [resultsExpress, resultsFastify],
